@@ -1,0 +1,41 @@
+name: Test Lighthouse audit with desktop device
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install Google Chrome
+        run: |
+          # Download and install Google Chrome stable
+          curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+            -o /tmp/google-chrome.deb
+          apt-get update -qq
+          dpkg -i /tmp/google-chrome.deb 2>/dev/null || true
+          apt-get install -f -y -qq
+          CHROME_BIN="$(which google-chrome-stable 2>/dev/null \
+            || which google-chrome 2>/dev/null \
+            || echo '')"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "ERROR: google-chrome not found after installation"
+            exit 1
+          fi
+          echo "Found Chrome at: $CHROME_BIN"
+          echo "CHROME_PATH=$CHROME_BIN" >> $GITHUB_ENV
+      - id: action
+        uses: .
+        with:
+          urls: 'https://www.example.com'
+          device: 'desktop'
+          verbose: 'true'
+      - name: Assert action completed with desktop device
+        env:
+          RESULTS: ${{ steps.action.outputs.lighthouseCheckResults }}
+        run: |
+          echo "Results: $RESULTS"
+          if [ -z "$RESULTS" ]; then
+            echo "FAIL: expected lighthouseCheckResults output to be set"
+            exit 1
+          fi
+          echo "PASS: action completed with desktop device"

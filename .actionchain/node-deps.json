@@ -1,0 +1,10 @@
+{
+  "status": "unbundlable",
+  "entries": [
+    {
+      "path": "dist/index.js",
+      "status": "unbundlable",
+      "reason": "Cannot read file: /tmp/actionchain-harden-4220666897/hardened/action/node_modules/chromium-bidi/lib/cjs/bidiMapper/BidiMapper.js"
+    }
+  ]
+}

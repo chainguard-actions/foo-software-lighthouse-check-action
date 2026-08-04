@@ -1,0 +1,15 @@
+name: Test Overrides
+on: [pull_request]
+
+permissions: {}
+
+jobs:
+  lighthouse-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
+    - name: Run Lighthouse
+      uses: ./
+      with:
+        overridesJsonFile: '.github/workflows/overrides.json'
+        urls: 'https://www.foo.software'

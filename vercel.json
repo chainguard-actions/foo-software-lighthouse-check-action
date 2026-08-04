@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [{ "src": "/dist/test/headerServer.js", "use": "@vercel/node" }],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/dist/test/headerServer.js",
+      "methods": ["GET"]
+    }
+  ]
+}
