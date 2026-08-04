@@ -1,1 +1,15 @@
-# foo-software-lighthouse-check-action
+# foo-software/lighthouse-check-action
+
+GitHub Action for running one or multiple Lighthouse audits featuring PR comments, Slack notifications and more!
+
+Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/foo-software/lighthouse-check-action](https://github.com/foo-software/lighthouse-check-action).
+
+## Versions
+
+| Version | Tag | Upstream commit |
+|---------|-----|-----------------|
+| v9.1.1 | [`v9.1.1`](https://github.com/chainguard-actions/foo-software-lighthouse-check-action/tree/v9.1.1) | [`bd97928`](https://github.com/foo-software/lighthouse-check-action/commit/bd97928ad9a76226de8729b9cf7d97823905fba0) |
+
+## Privacy
+
+This Action contacts Chainguard's licensing server to verify authorization. Connection metadata (IP address, GitHub repository identifier, timestamp, and any metadata encoded in the auth token) is transmitted to Chainguard, Inc. even if authorization is denied in accordance with our [Privacy Notice](https://www.chainguard.dev/legal/privacy-notice)
