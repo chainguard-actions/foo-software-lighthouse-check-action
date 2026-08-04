@@ -1,0 +1,1 @@
+# foo-software-lighthouse-check-action
