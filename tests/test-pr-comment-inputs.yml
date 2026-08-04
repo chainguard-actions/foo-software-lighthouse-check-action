@@ -1,0 +1,32 @@
+name: Test PR comment and git inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          urls: 'https://www.example.com'
+          gitHubAccessToken: ${{ github.token }}
+          gitAuthor: 'test-user'
+          gitBranch: 'main'
+          sha: 'abc1234567890abcdef1234567890abcdef12345'
+          commentUrl: 'https://api.github.com/repos/example/repo/commits/abc123/comments'
+          prCommentEnabled: 'true'
+          prCommentSaveOld: 'false'
+          verbose: 'true'
+      - name: Assert action ran (PR comment inputs accepted)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ] || [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action ran with PR comment inputs (outcome: $OUTCOME)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

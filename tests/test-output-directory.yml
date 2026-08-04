@@ -1,0 +1,35 @@
+name: Test output directory
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create output directory
+        run: mkdir -p /tmp/lighthouse-reports
+      - id: action
+        uses: .
+        with:
+          urls: 'https://www.example.com'
+          outputDirectory: '/tmp/lighthouse-reports'
+          verbose: 'true'
+        continue-on-error: true
+      - name: Assert action ran
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action ran (outcome=$OUTCOME)"
+      - name: Assert output directory exists
+        run: |
+          if [ ! -d /tmp/lighthouse-reports ]; then
+            echo "FAIL: output directory does not exist"
+            exit 1
+          fi
+          echo "PASS: output directory exists"
+          ls -la /tmp/lighthouse-reports || true

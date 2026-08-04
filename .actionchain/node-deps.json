@@ -1,0 +1,18 @@
+{
+  "status": "unbundlable",
+  "entries": [
+    {
+      "path": "dist/index.js",
+      "status": "unbundlable",
+      "reason": "indirect-require: Indirect calls to \"require\" will not be bundled",
+      "warnings": [
+        "indirect-require: Indirect calls to \"require\" will not be bundled",
+        "unsupported-require-call: This call to \"require\" will not be bundled because the argument is not a string literal",
+        "require-resolve-not-external: \"js-library-detector/library/libraries.js\" should be marked as external for use with \"require.resolve\"",
+        "ignored-dynamic-import: Importing \"encoding\" was allowed even though it could not be resolved because dynamic import failures appear to be handled here:",
+        "ignored-dynamic-import: Importing \"bufferutil\" was allowed even though it could not be resolved because dynamic import failures appear to be handled here:",
+        "ignored-dynamic-import: Importing \"utf-8-validate\" was allowed even though it could not be resolved because dynamic import failures appear to be handled here:"
+      ]
+    }
+  ]
+}

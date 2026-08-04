@@ -1,0 +1,53 @@
+name: Test Lighthouse audit with desktop device
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup Chrome
+        run: |
+          # Check if Chrome is already available
+          CHROME_BIN=$(which google-chrome-stable 2>/dev/null || \
+                       which google-chrome 2>/dev/null || \
+                       which chromium-browser 2>/dev/null || \
+                       which chromium 2>/dev/null || echo "")
+          if [ -n "$CHROME_BIN" ]; then
+            echo "Chrome already available at: $CHROME_BIN"
+          else
+            echo "Chrome not found, installing Google Chrome..."
+            apt-get update -qq
+            apt-get install -y -qq wget ca-certificates
+            wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            apt-get install -y -qq /tmp/chrome.deb || \
+              (apt-get install -y -f -qq && apt-get install -y -qq /tmp/chrome.deb)
+            CHROME_BIN=$(which google-chrome-stable 2>/dev/null || \
+                         which google-chrome 2>/dev/null || echo "")
+          fi
+          if [ -z "$CHROME_BIN" ]; then
+            echo "ERROR: No Chrome browser found or installed"
+            exit 1
+          fi
+          echo "Using Chrome at: $CHROME_BIN"
+          $CHROME_BIN --version 2>/dev/null || true
+          echo "CHROME_PATH=$CHROME_BIN" >> $GITHUB_ENV
+          echo "LIGHTHOUSE_CHROMIUM_PATH=$CHROME_BIN" >> $GITHUB_ENV
+      - name: Run Lighthouse audit in desktop mode
+        id: action
+        uses: .
+        with:
+          urls: 'https://www.example.com'
+          device: 'desktop'
+          verbose: 'true'
+      - name: Assert desktop audit completed successfully
+        env:
+          RESULTS: ${{ steps.action.outputs.lighthouseCheckResults }}
+        run: |
+          echo "Lighthouse desktop audit completed"
+          echo "Results: $RESULTS"
+          if [ -z "$RESULTS" ]; then
+            echo "FAIL: No results returned from Lighthouse desktop audit"
+            exit 1
+          fi
+          echo "PASS"

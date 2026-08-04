@@ -1,0 +1,20 @@
+name: Test Comment on Push
+on:
+  push:
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  lighthouse-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
+    - name: Run Lighthouse
+      uses: ./
+      with:
+        commentUrl: https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments
+        gitHubAccessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
+        prCommentEnabled: true
+        urls: 'https://www.foo.software'
