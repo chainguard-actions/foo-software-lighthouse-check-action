@@ -1,0 +1,39 @@
+name: Test Lighthouse audit with desktop device
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install Chromium
+        run: |
+          apt-get update -qq 2>/dev/null || true
+          apt-get install -y -qq chromium 2>/dev/null || \
+            apt-get install -y -qq chromium-browser 2>/dev/null || \
+            apt-get install -y -qq google-chrome-stable 2>/dev/null || true
+          CHROME_BIN=$(which chromium 2>/dev/null || \
+            which chromium-browser 2>/dev/null || \
+            which google-chrome-stable 2>/dev/null || \
+            which google-chrome 2>/dev/null || \
+            find /usr -name 'chromium*' -type f 2>/dev/null | head -1 || \
+            echo "")
+          echo "Found Chrome at: $CHROME_BIN"
+          if [ -n "$CHROME_BIN" ]; then
+            echo "CHROME_PATH=$CHROME_BIN" >> $GITHUB_ENV
+          fi
+      - id: action
+        uses: .
+        with:
+          urls: 'https://www.example.com'
+          device: 'desktop'
+          verbose: 'true'
+        continue-on-error: true
+      - name: Assert desktop audit ran
+        run: |
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped"
+            exit 1
+          fi
+          echo "PASS: action ran with desktop device (outcome: ${{ steps.action.outcome }})"

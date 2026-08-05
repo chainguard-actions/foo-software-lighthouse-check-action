@@ -1,6 +1,16 @@
 {
   "owner": "foo-software",
   "repo": "lighthouse-check-action",
-  "version": "",
-  "url": "https://github.com/foo-software/lighthouse-check-action"
+  "version": "v12.0.1",
+  "commit_sha": "a80267da2e0244b8a2e457a8575fc47590615852",
+  "url": "https://github.com/foo-software/lighthouse-check-action",
+  "policy_sha": "d636be7e43ef829af6e853da6b3c7566db9f72fe",
+  "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
+  "test_agent_version": "2",
+  "harden_agent_version": "2",
+  "node_artifact": {
+    "gcs_uri": "gs://prod-actions-node-artifacts/node-artifacts/foo-software/lighthouse-check-action/v12.0.1/sha256-7c02cc449b1b13db17d9173a87ba4bafb098ef9490e643a129d5eb2d66b8140f.tar.gz",
+    "sha256": "7c02cc449b1b13db17d9173a87ba4bafb098ef9490e643a129d5eb2d66b8140f",
+    "size_bytes": 35529972
+  }
 }

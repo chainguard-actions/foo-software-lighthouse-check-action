@@ -1,0 +1,21 @@
+name: Foo API Test
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
+    - name: Run Lighthouse
+      uses: ./
+      with:
+        device: all
+        fooApiToken: ${{ secrets.LIGHTHOUSE_CHECK_API_TOKEN }}
+        gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+        tag: GitHub Action (Foo API Test)
+        urls: ${{ secrets.LIGHTHOUSE_CHECK_URLS }}

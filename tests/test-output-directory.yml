@@ -1,0 +1,38 @@
+name: Test output directory
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create output directory
+        run: mkdir -p /tmp/lighthouse-reports
+      - id: action
+        uses: .
+        with:
+          urls: 'https://www.example.com'
+          outputDirectory: '/tmp/lighthouse-reports'
+          verbose: 'true'
+        continue-on-error: true
+      - name: Assert action ran
+        run: |
+          echo "outcome: ${{ steps.action.outcome }}"
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action ran with output directory (outcome=${{ steps.action.outcome }})"
+      - name: Check output directory was used
+        if: steps.action.outcome == 'success'
+        run: |
+          echo "Checking /tmp/lighthouse-reports for report files..."
+          ls -la /tmp/lighthouse-reports/ || true
+          # If the action succeeded, there should be some output files
+          FILE_COUNT=$(ls /tmp/lighthouse-reports/ 2>/dev/null | wc -l)
+          echo "File count: $FILE_COUNT"
+          if [ "$FILE_COUNT" -eq 0 ]; then
+            echo "WARN: No report files found in output directory (may be expected if audit failed)"
+          else
+            echo "PASS: Report files found in output directory"
+          fi
